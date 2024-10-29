@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Management System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Event Management System</h1>
+        <nav>
+            <a href="{{ url_for('index') }}">Home</a>
+            {% if 'username' in session %}
+                {% if session['role'] == 'cso' %}
+                    <a href="{{ url_for('cso_dashboard') }}">CSO Dashboard</a>
+                {% elif session['role'] == 'senior_cso' %}
+                    <a href="{{ url_for('senior_cso_dashboard') }}">Senior CSO Dashboard</a>
+                {% elif session['role'] == 'fm' %}
+                    <a href="{{ url_for('fm_dashboard') }}">Finance Dashboard</a>
+                {% elif session['role'] == 'am' %}
+                    <a href="{{ url_for('am_dashboard') }}">Admin Dashboard</a>
+                {% endif %}
+                <a href="{{ url_for('logout') }}">Logout</a>
+            {% endif %}
+        </nav>
+    </header>
+    <main>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <ul class="flashes">
+                    {% for category, message in messages %}
+                        <li class="flash {{ category }}">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

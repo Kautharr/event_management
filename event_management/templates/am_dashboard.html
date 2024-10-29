@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h2>Administration Manager Dashboard</h2>
+    <h3>Review and Approve or Reject Event Requests</h3>
+    {% if requests %}
+        <table>
+            <tr>
+                <th>Tracking ID</th>
+                <th>Client Username</th>
+                <th>Event Name</th>
+                <th>Event Date</th>
+                <th>Budget</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+            {% for request in requests %}
+                <tr>
+                    <td>{{ request.id }}</td>
+                    <td>{{ request.client_username }}</td>
+                    <td>{{ request.event_name }}</td>
+                    <td>{{ request.event_date }}</td>
+                    <td>${{ request.budget }}</td>
+                    <td>{{ request.status }}</td>
+                    <td>
+                        <form action="{{ url_for('approve_request', request_id=request.id) }}" method="POST" style="display:inline;">
+                            <button type="submit">Approve</button>
+                        </form>
+                        <form action="{{ url_for('reject_request_am', request_id=request.id) }}" method="POST" style="display:inline;">
+                            <button type="submit">Reject</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>No requests for final review.</p>
+    {% endif %}
+</div>
+{% endblock %}

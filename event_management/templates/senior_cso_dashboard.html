@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container" style="max-width: 80%; margin: auto; text-align: center;">
+    <h2 class="text-center">All CSO-Submitted Requests</h2>
+    {% if requests %}
+        <div class="table-responsive">
+            <table class="table table-striped mt-3">
+                <thead>
+                    <tr>
+                        <th>Record Number</th>
+                        <th>Client Name</th>
+                        <th>Event Type</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Budget (SEK)</th>
+                        <th>Status</th>
+                        <th>Meeting Time</th>
+                        <th class="text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for request in requests %}
+                        <tr>
+                            <td>{{ request.record_number }}</td>
+                            <td>{{ request.client_name }}</td>
+                            <td>{{ request.event_type }}</td>
+                            <td>{{ request.start_date }}</td>
+                            <td>{{ request.end_date }}</td>
+                            <td>{{ request.budget }}</td>
+                            <td>{{ request.status }}</td>
+                            <td>{{ request.meeting_time if request.meeting_time else "Not Scheduled" }}</td>
+                            <td class="text-center">
+                                {% if request.status == "Pending Approval by Senior CSO" %}
+                                    <form action="{{ url_for('approve_request', record_number=request.record_number) }}" method="POST" style="display:inline-block;">
+                                        <input type="datetime-local" name="meeting_time" required class="form-control mb-2">
+                                        <button type="submit" class="btn btn-success btn-sm">Schedule Meeting</button>
+                                    </form>
+                                    <form action="{{ url_for('reject_request', record_number=request.record_number) }}" method="POST" style="display:inline-block; margin-top: 5px;">
+                                        <button type="submit" class="btn btn-danger btn-sm">Reject</button>
+                                    </form>
+                                {% else %}
+                                    <span>N/A</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p>No requests are available.</p>
+    {% endif %}
+</div>
+
+<style>
+    /* Center table and content */
+    .container {
+        text-align: center;
+        margin: auto;
+    }
+
+    .table-responsive {
+        max-width: 100%;
+        overflow-x: auto;
+        margin-top: 15px;
+    }
+
+    .table th, .table td {
+        vertical-align: middle;
+        text-align: center;
+    }
+
+    /* Align actions and meeting input neatly */
+    .form-control {
+        width: auto;
+        display: inline-block;
+        vertical-align: middle;
+    }
+
+    /* Buttons spacing */
+    .btn {
+        margin: 2px;
+    }
+</style>
+{% endblock %}

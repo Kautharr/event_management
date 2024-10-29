@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h2>All Event Requests</h2>
+    {% if requests %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Tracking ID</th>
+                    <th>Client Name</th>
+                    <th>Event Name</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Budget (SEK)</th>
+                    <th>Details</th>
+                    <th>Status</th>
+                    <th>Submitted At</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for request in requests %}
+                    <tr>
+                        <td>{{ request.record_number }}</td>
+                        <td>{{ request.client_name }}</td>
+                        <td>{{ request.event_name }}</td>
+                        <td>{{ request.start_date }}</td>
+                        <td>{{ request.end_date }}</td>
+                        <td>SEK {{ request.budget }}</td>
+                        <td>{{ request.details }}</td>
+                        <td>{{ request.status }}</td>
+                        <td>{{ request.submitted_at }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No requests have been submitted yet.</p>
+    {% endif %}
+</div>
+{% endblock %}
